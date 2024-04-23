@@ -6,6 +6,7 @@ To use the GUI, run:
 
 streamlit run gui.py
 
+![llama-chatbot](assets/demo.gif)
 To use the API:
 
 Send a POST message and wrap it inside the key "messages".
