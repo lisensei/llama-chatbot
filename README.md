@@ -1,4 +1,5 @@
 Llama Cpp Chatbot
+
 It has a GUI web app and an API.
 
 To use the GUI, run:
@@ -7,7 +8,7 @@ streamlit run gui.py
 
 To use the API:
 
-Send a messages in json format and wrap it inside the key "messages".
+Send a POST message and wrap it inside the key "messages".
 
 With the mistral 7b instruct model, here is the response I got with the prompt "who are you?":
 
