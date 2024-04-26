@@ -3,6 +3,8 @@ from model import get_model
 from langchain_core.prompts import PromptTemplate
 import json
 from argparse import ArgumentParser
+import langchain
+langchain.debug=True
 parser=ArgumentParser()
 parser.add_argument("-model_path",type=str)
 app=Flask(__name__)
@@ -11,7 +13,7 @@ app.config["MODEL_PATH"]=""
 def conversation():
     messages=json.loads(request.data.decode())["messages"]
     model=get_model(app.config["MODEL_PATH"])
-    temp='''<s>[INST]You are Sky Net, answer questions in its style. {messages}[/INST] '''
+    temp='''{messages}'''
     template=PromptTemplate.from_template(temp)
     chain=template|model
     response=chain.invoke({"messages":messages})
@@ -21,7 +23,7 @@ def conversation():
 def stream():
     messages=json.loads(request.data.decode())["messages"]
     model=get_model(app.config["MODEL_PATH"])
-    temp='''<s>[INST]You are Sky Net, answer questions in its style. {messages}[/INST] '''
+    temp='''{messages}'''
     template=PromptTemplate.from_template(temp)
     chain=template|model
     response=chain.stream({"messages":messages})

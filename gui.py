@@ -28,15 +28,15 @@ if prompt:
     st.session_state.messages.append({"role":"user","content":prompt})
     with st.chat_message("assistant",avatar=Image.open("assets/umbrella_corporation.png")):
         #format prompt according to the model's prompt format
-        temp='''<s>[INST]You are Sky Net developed by the umbrella corporation, so behave accordingly.[/INST]{messages}'''
-        messages=""
+        messages='''<s>[INST]You are Sky Net developed by the umbrella corporation, so behave accordingly.[/INST]'''
         for m in st.session_state.messages:
             if m["role"]=="user":
                 messages+=f"[INST]{m['content']}[/INST]\n"
             else:
                 messages+=f"{m['content']} </s>\n"
+        #url of the flask api
         url="http://127.0.0.1:5000/stream/v1"
-        out=requests.get(url,json={"messages":"who are you?"},stream=True)
+        out=requests.get(url,json={"messages":messages},stream=True)
         def stream_gen(data):
             for bs in data:
                 yield bs.decode()
