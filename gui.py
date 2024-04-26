@@ -3,13 +3,10 @@ import langchain
 from langchain_core.prompts import PromptTemplate
 from model import get_model
 from PIL import Image
+import requests
 langchain.debug=True
 st.title("Sky Net")
 st.session_state.character="SkyNet"
-
-if "model" not in st.session_state:
-    #fill in the path to a llama cpp model
-    st.session_state.model=get_model(path="../llama/mistral")
 
 if "messages" not in st.session_state:
     st.session_state["messages"]=[]
@@ -38,8 +35,10 @@ if prompt:
                 messages+=f"[INST]{m['content']}[/INST]\n"
             else:
                 messages+=f"{m['content']} </s>\n"
-        template=PromptTemplate.from_template(temp)
-        chain=template|st.session_state.model
-        out=chain.stream({"context":"","messages":messages})
-        response=st.write_stream(out)
+        url="http://127.0.0.1:5000/stream/v1"
+        out=requests.get(url,json={"messages":"who are you?"},stream=True)
+        def stream_gen(data):
+            for bs in data:
+                yield bs.decode()
+        response=st.write_stream(stream_gen(out))
     st.session_state.messages.append({"role":"assistant","content":response})
